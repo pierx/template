@@ -1,20 +1,26 @@
 package substratum.theme.template
 
+import substratum.theme.template.BuildConfig.VAL_SUBSTRATUM_FILTER_CHECK
+import substratum.theme.template.BuildConfig.VAL_ENFORCE_MINIMUM_SUBSTRATUM_VERSION
+import substratum.theme.template.BuildConfig.VAL_MINIMUM_SUBSTRATUM_VERSION
+import substratum.theme.template.BuildConfig.VAL_SHOW_LAUNCH_DIALOG
+import substratum.theme.template.BuildConfig.VAL_SHOW_DIALOG_REPEATEDLY
+
 object AdvancedConstants {
 
     // Dynamic filter that only works on Substratum 627+
     // WARNING: Only enable if you are sure you want certification status to pass on Substratum
     //          before launching the theme, or else it will throw an unauthorized toast!
-    const internal val SUBSTRATUM_FILTER_CHECK = false
+    const internal val SUBSTRATUM_FILTER_CHECK = VAL_SUBSTRATUM_FILTER_CHECK
 
     // Miscellaneous Checks
-    const val ENFORCE_MINIMUM_SUBSTRATUM_VERSION = true
-    const val MINIMUM_SUBSTRATUM_VERSION = 712 // 510 is the final MM build
+    const val ENFORCE_MINIMUM_SUBSTRATUM_VERSION = VAL_ENFORCE_MINIMUM_SUBSTRATUM_VERSION
+    const val MINIMUM_SUBSTRATUM_VERSION = VAL_MINIMUM_SUBSTRATUM_VERSION // 510 is the final MM build
 
     // Custom message on theme launch, see theme_strings.xml for changing the dialog content
     // Set SHOW_DIALOG_REPEATEDLY to true if you want the dialog to be showed on every theme launch
-    const val SHOW_LAUNCH_DIALOG = false
-    const val SHOW_DIALOG_REPEATEDLY = false
+    const val SHOW_LAUNCH_DIALOG = VAL_SHOW_LAUNCH_DIALOG
+    const val SHOW_DIALOG_REPEATEDLY = VAL_SHOW_DIALOG_REPEATEDLY
 
     // Blacklisted APKs to prevent theme launching, these include simple regex formatting, without
     // full regex formatting (e.g. com.android. will block everything that starts with com.android.)

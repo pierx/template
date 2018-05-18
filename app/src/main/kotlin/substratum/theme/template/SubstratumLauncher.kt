@@ -34,6 +34,8 @@ import substratum.theme.template.ThemeFunctions.getSubstratumUpdatedResponse
 import substratum.theme.template.ThemeFunctions.hasOtherThemeSystem
 import substratum.theme.template.ThemeFunctions.isCallingPackageAllowed
 import substratum.theme.template.ThemeFunctions.isPackageInstalled
+import substratum.theme.template.R.string.VAL_THEMEAUTHOR
+import substratum.theme.template.R.string.VAL_THEMENAME
 
 /**
  * NOTE TO THEMERS
@@ -83,7 +85,7 @@ class SubstratumLauncher : Activity() {
                 override fun dontAllow(error: PiracyCheckerError, pirateApp: PirateApp?) {
                     val parse = String.format(
                             getString(R.string.toast_unlicensed),
-                            getString(R.string.ThemeName))
+                            getString(VAL_THEMENAME))
                     Toast.makeText(this@SubstratumLauncher, parse, Toast.LENGTH_SHORT).show()
                     finish()
                 }
@@ -109,7 +111,7 @@ class SubstratumLauncher : Activity() {
                     && !getSubstratumUpdatedResponse(applicationContext)) {
                 val parse = String.format(
                         getString(R.string.outdated_substratum),
-                        getString(R.string.ThemeName),
+                        getString(VAL_THEMENAME),
                         MINIMUM_SUBSTRATUM_VERSION.toString())
                 Toast.makeText(this, parse, Toast.LENGTH_SHORT).show()
                 return false
@@ -125,8 +127,8 @@ class SubstratumLauncher : Activity() {
             returnIntent = Intent(receiveKeysIntent)
         }
 
-        val themeName = getString(R.string.ThemeName)
-        val themeAuthor = getString(R.string.ThemeAuthor)
+        val themeName = getString(VAL_THEMENAME)
+        val themeAuthor = getString(VAL_THEMEAUTHOR)
         val themePid = packageName
         returnIntent.putExtra("theme_name", themeName)
         returnIntent.putExtra("theme_author", themeAuthor)
@@ -153,7 +155,7 @@ class SubstratumLauncher : Activity() {
         if (callingPackage == null) {
             val parse = String.format(
                     getString(R.string.outdated_substratum),
-                    getString(R.string.ThemeName),
+                    getString(VAL_THEMENAME),
                     915)
             Toast.makeText(this, parse, Toast.LENGTH_SHORT).show()
             finish()

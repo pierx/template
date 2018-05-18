@@ -7,10 +7,52 @@ import javax.crypto.spec.SecretKeySpec
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply from: 'ThemerConstants.gradle'
 
 ext {
-    // Encryption values, do not touch as we generate a random key every time you compile!
+    packageName = project.packageName
+    minSdk = project.minSdkVersion.toInteger()
+    targetSdk = project.targetSdkVersion.toInteger()
+    vCode = project.versionCode.toInteger()
+    vName = project.versionName
+
+    ThemeName = project.ThemeName
+    ThemeAuthor = project.ThemeAuthor
+    ThemeAuthorEmail = project.ThemeAuthorEmail
+    ThemeWallpaperSource = project.ThemeWallpaperSource
+    ThemeSupportLegacy = project.ThemeSupportLegacy
+    ThemeSupportSamsung = project.ThemeSupportSamsung.toBoolean()
+    ThemeHeroOverride = project.ThemeHeroOverride.toBoolean()
+
+    // Whether the theme assets should be encrypted or not,
+    // this makes it harder for pirates and kangers! (DEFAULT: true)
+    SHOULD_ENCRYPT_ASSETS = project.SHOULD_ENCRYPT_ASSETS.toBoolean()
+
+    // Whether this theme supports third party theme systems, we will not be able to help you debug
+    // your themes on external theming systems, so the team will NOT respond to external systems if
+    // there are issues with your theme (DEFAULT: false)
+    SUPPORTS_THIRD_PARTY_SYSTEMS = project.SUPPORTS_THIRD_PARTY_SYSTEMS.toBoolean()
+
+    // Play Store AntiPiracy LVL configurations
+    BASE_64_LICENSE_KEY = project.BASE_64_LICENSE_KEY
+    APK_SIGNATURE_PRODUCTION = project.APK_SIGNATURE_PRODUCTION
+
+    // Piracy library configurations
+    ENABLE_APP_BLACKLIST_CHECK = project.ENABLE_APP_BLACKLIST_CHECK.toBoolean()
+    ENFORCE_INTERNET_CHECK = project.ENFORCE_INTERNET_CHECK.toBoolean()
+    ENFORCE_GOOGLE_PLAY_INSTALL = project.ENFORCE_GOOGLE_PLAY_INSTALL.toBoolean()
+    ENFORCE_AMAZON_APP_STORE_INSTALL = project.ENFORCE_AMAZON_APP_STORE_INSTALL.toBoolean()
+
+    // Allow third party substratum builds
+    ALLOW_THIRD_PARTY_SUBSTRATUM_BUILDS = project.ALLOW_THIRD_PARTY_SUBSTRATUM_BUILDS.toBoolean()
+
+    /*MODs*/
+    SUBSTRATUM_FILTER_CHECK = project.SUBSTRATUM_FILTER_CHECK.toBoolean()
+    ENFORCE_MINIMUM_SUBSTRATUM_VERSION = project.ENFORCE_MINIMUM_SUBSTRATUM_VERSION.toBoolean()
+    MINIMUM_SUBSTRATUM_VERSION = project.MINIMUM_SUBSTRATUM_VERSION.toInteger()
+    SHOW_LAUNCH_DIALOG = project.SHOW_LAUNCH_DIALOG.toBoolean()
+    SHOW_DIALOG_REPEATEDLY = project.SHOW_DIALOG_REPEATEDLY.toBoolean()
+
+    /*DO NOT MODIFY*/
     byte[] key = new byte[16]
     new Random().nextBytes(key)
     KEY = key
@@ -24,16 +66,11 @@ android {
     buildToolsVersion '27.0.3'
 
     defaultConfig {
-        // If you're planning to change up the package name, ensure you have read the readme
-        // thoroughly!
-        applicationId "substratum.theme.template"
-        // We are only supporting Nougat and above, all new changes will incorporate Nougat changes
-        // to the substratum repo rather than anything lower. Keep targetSdkVersion the same.
-        minSdkVersion 24
-        targetSdkVersion 27
-        // Both versions must be changed to increment on Play Store/user's devices
-        versionCode 2
-        versionName "2.0"
+        applicationId packageName
+        minSdkVersion minSdk
+        targetSdkVersion targetSdk
+        versionCode vCode
+        versionName vName
 
         // Themers: Do not touch this, they will only formulate integrity structure of the core
         //          template
@@ -45,8 +82,25 @@ android {
         buildConfigField "boolean", "ENFORCE_GOOGLE_PLAY_INSTALL", "" + ENFORCE_GOOGLE_PLAY_INSTALL
         buildConfigField "boolean", "ENFORCE_AMAZON_APP_STORE_INSTALL", "" + ENFORCE_AMAZON_APP_STORE_INSTALL
         buildConfigField "boolean", "ALLOW_THIRD_PARTY_SUBSTRATUM_BUILDS", "" + ALLOW_THIRD_PARTY_SUBSTRATUM_BUILDS
-        resValue "string", "encryption_status", (shouldEncrypt() ? "onCompileVerify" : "false")
 
+        // Constant
+        buildConfigField "boolean", "VAL_SUBSTRATUM_FILTER_CHECK", "" + SUBSTRATUM_FILTER_CHECK
+        buildConfigField "boolean", "VAL_ENFORCE_MINIMUM_SUBSTRATUM_VERSION", "" + ENFORCE_MINIMUM_SUBSTRATUM_VERSION
+        buildConfigField "boolean", "VAL_SHOW_LAUNCH_DIALOG", "" + SHOW_LAUNCH_DIALOG
+        buildConfigField "boolean", "VAL_SHOW_DIALOG_REPEATEDLY", "" + SHOW_DIALOG_REPEATEDLY
+        buildConfigField "int", "VAL_MINIMUM_SUBSTRATUM_VERSION", "" + MINIMUM_SUBSTRATUM_VERSION
+
+        //Theme Configuration
+        resValue "string", "VAL_THEMENAME", "" + ThemeName
+        resValue "string", "VAL_THEMEAUTHOR", "" + ThemeAuthor
+        resValue "string", "VAL_ThemeAuthorEmail", "" + ThemeAuthorEmail
+        resValue "string", "VAL_ThemeWallpaperSource", "" + ThemeWallpaperSource
+        resValue "string", "VAL_ThemeHeroOverride", "" + ThemeHeroOverride
+        resValue "bool", "VAL_ThemeSupportLegacy", "" + ThemeSupportLegacy
+        resValue "bool", "VAL_ThemeSupportSamsung", "" + ThemeSupportSamsung
+
+        //DO NOT MODIFY
+        resValue "string", "encryption_status", (shouldEncrypt() ? "onCompileVerify" : "false")
         buildConfigField "String", "IV_KEY", "\"" + IV_KEY + "\""
         buildConfigField "byte[]", "DECRYPTION_KEY", String.valueOf("\"" + KEY + "\"").replace("\"", "").replace("[", "{").replace("]", "}")
         buildConfigField "byte[]", "IV_KEY", String.valueOf("\"" + IV_KEY + "\"").replace("\"", "").replace("[", "{").replace("]", "}")
@@ -86,7 +140,7 @@ task encryptAssets {
     if (!tempAssets.exists()) {
         println("Encrypting duplicated assets, don't worry, your original assets are safe...")
         def list = []
-        def dir = new File(getProjectDir(), "/src/main/assets")
+        def dir = new File(getProjectDir(), "src/main/assets")
         dir.eachFileRecurse(FileType.FILES) { file ->
             list << file
 

@@ -1,11 +1,4 @@
 <resources>
-    <!--<string name="ThemeName">Test</string>-->
-    <!--<string name="ThemeAuthor">pierx</string>-->
-    <!--<string name="ThemeAuthorEmail"></string>-->
-    <!--<string name="ThemeWallpaperSource"/>-->
-    <!--<bool name="ThemeSupportLegacy">true</bool>-->
-    <!--<bool name="ThemeSupportSamsung">false</bool>-->
-    <!--<string name="ThemeHeroOverride">auto</string>-->
     <string-array name="ThemeChangelog">
         <item>Change One</item>
         <item>Change Two</item>

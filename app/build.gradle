@@ -71,6 +71,7 @@ android {
         targetSdkVersion targetSdk
         versionCode vCode
         versionName vName
+        setProperty("archivesBaseName", "$applicationId" + "-" + "$versionName")
 
         // Themers: Do not touch this, they will only formulate integrity structure of the core
         //          template
@@ -109,6 +110,7 @@ android {
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            versionNameSuffix '-debug'
         }
         release {
             // When you compile an APK as release, your resources and IV keys will be safeguarded
@@ -116,6 +118,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    lintOptions {
+        tasks.lint.enabled = false
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
